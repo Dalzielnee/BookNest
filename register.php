@@ -20,7 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mb_strlen($old['full_name']) < 2) $errors['full_name'] = 'Họ tên tối thiểu 2 ký tự.';
     if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL)) $errors['email'] = 'Email không hợp lệ.';
     if ($old['phone'] !== '' && !preg_match('/^[0-9+\s.-]{8,15}$/', $old['phone'])) $errors['phone'] = 'Số điện thoại không hợp lệ.';
-    if (strlen($pass) < 6) $errors['password'] = 'Mật khẩu tối thiểu 6 ký tự.';
+    if (strlen($pass) < 8) {
+        $errors['password'] = 'Mật khẩu tối thiểu 8 ký tự.';
+    } elseif (!preg_match('/[a-z]/', $pass) || !preg_match('/[A-Z]/', $pass) || !preg_match('/[0-9]/', $pass)) {
+        $errors['password'] = 'Mật khẩu phải có chữ hoa, chữ thường và chữ số.';
+    }
     if ($pass !== $pass2) $errors['password2'] = 'Mật khẩu nhập lại không khớp.';
 
     if (!$errors) {
@@ -58,8 +62,8 @@ function field_err(array $errors, string $k): string
     <div class="form-group"><label for="phone">Số điện thoại (không bắt buộc)</label>
       <input id="phone" type="tel" name="phone" value="<?= e($old['phone']) ?>"><?= field_err($errors, 'phone') ?></div>
     <div class="form-group"><label for="password">Mật khẩu</label>
-      <input id="password" type="password" name="password" required><?= field_err($errors, 'password') ?></div>
-    <div class="form-group"><label for="password2">Nhập lại mật khẩu</label>
+      <input id="password" type="password" name="password" required>
+      <small class="muted">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường và chữ số.</small><?= field_err($errors, 'password') ?></div>    <div class="form-group"><label for="password2">Nhập lại mật khẩu</label>
       <input id="password2" type="password" name="password2" required><?= field_err($errors, 'password2') ?></div>
     <button class="btn" style="width:100%">Đăng ký</button>
   </form>
