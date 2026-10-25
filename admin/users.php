@@ -16,10 +16,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect(url('admin/users.php'));
 }
 
-$users = $pdo->query('SELECT u.*, (SELECT COUNT(*) FROM orders o WHERE o.user_id = u.id) AS orders FROM users u ORDER BY u.id')->fetchAll();
-?>
-<h1>Người dùng</h1>
-<div class="table-wrap"><table>
+$q = trim($_GET['q'] ?? '');
+$sql = 'SELECT u.*, (SELECT COUNT(*) FROM orders o WHERE o.user_id = u.id) AS orders FROM users u';
+$params = [];
+if ($q !== '') {
+    $sql .= ' WHERE u.full_name LIKE ? OR u.email LIKE ?';
+    $params = ['%' . $q . '%', '%' . $q . '%'];
+}
+$sql .= ' ORDER BY u.id';
+$st = $pdo->prepare($sql);
+$st->execute($params);
+$users = $st->fetchAll();?>
+<div class="toolbar"><h1 style="margin:0">Người dùng</h1>
+  <form method="get" style="display:flex;gap:6px">
+    <input type="search" name="q" value="<?= e($q) ?>" placeholder="Tìm theo tên hoặc email" style="width:auto">
+    <button class="btn btn-sm">Tìm</button>
+    <?php if ($q !== ''): ?><a class="btn btn-sm btn-outline" href="users.php">Xóa lọc</a><?php endif; ?>
+  </form></div><div class="table-wrap"><table>
   <thead><tr><th>Họ tên</th><th>Email</th><th>SĐT</th><th>Đơn hàng</th><th>Ngày tạo</th><th>Quyền</th></tr></thead>
   <tbody>
   <?php foreach ($users as $u): ?>
@@ -39,5 +52,6 @@ $users = $pdo->query('SELECT u.*, (SELECT COUNT(*) FROM orders o WHERE o.user_id
         <?php endif; ?>
       </td></tr>
   <?php endforeach; ?>
+    <?php if (!$users): ?><tr><td colspan="6" class="muted">Không tìm thấy người dùng.</td></tr><?php endif; ?>
   </tbody></table></div>
 <?php include __DIR__ . '/../includes/admin_footer.php'; ?>
