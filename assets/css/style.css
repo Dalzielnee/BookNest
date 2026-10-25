@@ -112,8 +112,15 @@ td img.thumb{width:44px;height:58px;object-fit:cover;border-radius:6px}
 .pw-toggle:hover { color: #000; }
 .pw-toggle .eye-off { display: none; }
 .pw-toggle.showing .eye { display: none; }
-.pw-toggle.showing .eye-off { display: block; }.pw-rules { list-style: none; margin: 6px 0 0; padding: 0; font-size: .85rem; color: #888; }
+.pw-toggle.showing .eye-off { display: block; }
+.pw-rules { list-style: none; margin: 6px 0 0; padding: 0; font-size: .85rem; color: #888; }
 .pw-rules li::before { content: "○ "; }
 .pw-rules li.ok { color: #2e7d32; }
 .pw-rules li.ok::before { content: "✓ "; }
 .error[hidden] { display: none; }
+
+.logout-form { display: inline; margin: 0; }
+.link-btn { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; }
+.link-btn:hover { text-decoration: underline; }
+.admin-side .logout-form { display: block; }
+.admin-side .link-btn { display: block; width: 100%; text-align: left; padding: 10px 14px; }
