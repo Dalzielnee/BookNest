@@ -27,8 +27,10 @@ $pageTitle = ($title ?? '') ? $title . ' | ' . $cfg['site_name'] : $cfg['site_na
         <a href="<?= url('orders.php') ?>">Đơn hàng</a>
         <a href="<?= url('profile.php') ?>">👤 <?= e($user['full_name']) ?></a>
         <?php if ($user['role'] === 'admin'): ?><a href="<?= url('admin/index.php') ?>">Quản trị</a><?php endif; ?>
-        <a href="<?= url('logout.php') ?>">Đăng xuất</a>
-      <?php else: ?>
+        <form class="logout-form" method="post" action="<?= url('logout.php') ?>">
+          <?= csrf_field() ?>
+          <button type="submit" class="link-btn">Đăng xuất</button>
+        </form>      <?php else: ?>
         <a href="<?= url('login.php') ?>">Đăng nhập</a>
         <a class="btn btn-sm" href="<?= url('register.php') ?>">Đăng ký</a>
       <?php endif; ?>

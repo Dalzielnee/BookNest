@@ -25,7 +25,9 @@ $menu = [
       <a href="<?= url('admin/' . $file) ?>" class="<?= $cur === $file ? 'active' : '' ?>"><?= $label ?></a>
     <?php endforeach; ?>
     <a href="<?= url('index.php') ?>">↗ Xem website</a>
-    <a href="<?= url('logout.php') ?>">Đăng xuất (<?= e($admin['full_name']) ?>)</a>
-  </aside>
+    <form class="logout-form" method="post" action="<?= url('logout.php') ?>">
+      <?= csrf_field() ?>
+      <button type="submit" class="link-btn">Đăng xuất (<?= e($admin['full_name']) ?>)</button>
+    </form>  </aside>
   <section class="admin-main">
     <?= flash_render() ?>
