@@ -14,8 +14,9 @@ if (!$p) {
     exit;
 }
 
-$st = db()->prepare('SELECT * FROM products WHERE category_id = ? AND id <> ? ORDER BY RAND() LIMIT 4');
-$st->execute([$p['category_id'], $p['id']]);
+// Ưu tiên sách cùng tác giả, bỏ sách hết hàng, còn lại lấy ngẫu nhiên cùng thể loại
+$st = db()->prepare('SELECT * FROM products WHERE category_id = ? AND id <> ? AND stock > 0 ORDER BY (author = ?) DESC, RAND() LIMIT 4');
+$st->execute([$p['category_id'], $p['id'], $p['author']]);
 $related = $st->fetchAll();
 
 $title = $p['title'];
