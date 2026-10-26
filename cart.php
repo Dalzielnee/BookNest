@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ajax = ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest'; // request từ cart.js
     $ok = true;
     $msg = '';
+    $level = 'success'; // success | warning | danger
 
     if ($action === 'add' || $action === 'update') {
         $st = db()->prepare('SELECT id, stock, title FROM products WHERE id = ?');
@@ -15,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $p = $st->fetch();
         if (!$p) {
             $ok = false;
+            $level = 'danger';
             $msg = 'Sách không tồn tại.';
             if (!$ajax) flash('danger', $msg);
         } else {
@@ -24,16 +26,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             if ($qty > $p['stock']) {
                 $qty = (int)$p['stock'];
+                $level = 'warning';
                 $msg = 'Chỉ còn ' . $p['stock'] . ' cuốn "' . $p['title'] . '".';
                 if (!$ajax) flash('warning', $msg);
             }
             if ($qty > 0) {
                 $_SESSION['cart'][$id] = $qty;
-                if ($action === 'add') flash('success', 'Đã thêm "' . $p['title'] . '" vào giỏ hàng.');
+                if ($action === 'add') {
+                    if ($ajax) {
+                        if ($msg === '') $msg = 'Đã thêm "' . $p['title'] . '" vào giỏ hàng.';
+                    } else {
+                        flash('success', 'Đã thêm "' . $p['title'] . '" vào giỏ hàng.');
+                    }
+                }
             }
         }
-        // Cập nhật số lượng bằng AJAX: trả JSON, không tải lại trang
-        if ($ajax && $action === 'update') {
+        // Cập nhật số lượng hoặc thêm vào giỏ bằng AJAX: trả JSON, không tải lại trang
+        if ($ajax) {
             $items = cart_items();
             $line = 0;
             foreach ($items as $it) {
@@ -47,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'total' => money(cart_total($items)),
                 'count' => cart_count(),
                 'message' => $msg,
+                'level' => $level,
             ]);
             exit;
         }
