@@ -36,6 +36,8 @@ CREATE TABLE products (
   image VARCHAR(255) DEFAULT NULL,
   description TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_products_created (created_at),
+  INDEX idx_products_price (price),
   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
@@ -49,6 +51,8 @@ CREATE TABLE orders (
   total DECIMAL(14,0) NOT NULL,
   status ENUM('pending','confirmed','shipping','done','cancelled') NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_orders_user_status (user_id, status),
+  INDEX idx_orders_status (status),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
