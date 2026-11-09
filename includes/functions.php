@@ -164,8 +164,13 @@ function cart_total(array $items): float
 /* ---------- Ảnh bìa ---------- */
 function cover_url(?string $image): string
 {
-    if ($image && is_file(__DIR__ . '/../uploads/' . $image)) {
-        return url('uploads/' . $image);
+    if ($image) {
+        if (is_file(__DIR__ . '/../uploads/' . $image)) {
+            return url('uploads/' . $image);
+        }
+        if (is_file(__DIR__ . '/../assets/img/covers/' . $image)) {
+            return url('assets/img/covers/' . $image);
+        }
     }
     return url('assets/img/default-cover.svg');
 }

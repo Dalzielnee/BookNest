@@ -94,3 +94,19 @@ INSERT INTO products (category_id,title,author,price,stock,description) VALUES
 (4,'Atomic Habits','James Clear',165000,45,'Xây dựng thói quen tốt, loại bỏ thói quen xấu.'),
 (5,'Doraemon tập 1','Fujiko F. Fujio',22000,100,'Truyện tranh thiếu nhi nổi tiếng về chú mèo máy.'),
 (5,'Hoàng tử bé','Antoine de Saint-Exupéry',68000,55,'Câu chuyện triết lý nhẹ nhàng dành cho mọi lứa tuổi.');
+
+
+UPDATE products SET image = 'DeMen.jpg' WHERE id = 1;
+UPDATE products SET image = 'SoDo.jpg' WHERE id = 2;
+UPDATE products SET image = 'MatBiec.jpg' WHERE id = 3;
+UPDATE products SET image = 'NhaGiaKim.jpg' WHERE id = 4;
+UPDATE products SET image = 'ChaGiauChaNgheo.jpg' WHERE id = 5;
+UPDATE products SET image = 'NghiGiauLamGiau.jpg' WHERE id = 6;
+UPDATE products SET image = 'KhoiNghiepTinhGon.jpg' WHERE id = 7;
+UPDATE products SET image = 'CleanCode.jpg' WHERE id = 8;
+UPDATE products SET image = 'LapTrinhPHPMySQL.jpg' WHERE id = 9;
+UPDATE products SET image = 'CoSoDuLieuQuanHe.jpg' WHERE id = 10;
+UPDATE products SET image = 'DacNhanTam.jpg' WHERE id = 11;
+UPDATE products SET image = 'AtomicHabit.jpg' WHERE id = 12;
+UPDATE products SET image = 'Doraemon.jpg' WHERE id = 13;
+UPDATE products SET image = 'HoangTuBe.jpg' WHERE id = 14;
