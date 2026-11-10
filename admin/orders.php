@@ -87,7 +87,8 @@ if ($id) {
       <?php foreach (ORDER_STATUS as $k => $label): ?>
         <option value="<?= e($k) ?>" <?= $filter === $k ? 'selected' : '' ?>><?= e($label) ?></option>
       <?php endforeach; ?>
-    </select></form></div>
+    </select></form>
+    <a class="btn btn-sm btn-outline" href="export_orders.php<?= $filter ? '?status=' . urlencode($filter) : '' ?>">⬇ Xuất CSV</a></div>
   <div class="table-wrap"><table>
     <thead><tr><th>Mã</th><th>Khách hàng</th><th>Ngày đặt</th><th>Tổng</th><th>Trạng thái</th><th></th></tr></thead>
     <tbody>
