@@ -124,3 +124,22 @@ td img.thumb{width:44px;height:58px;object-fit:cover;border-radius:6px}
 .link-btn:hover { text-decoration: underline; }
 .admin-side .logout-form { display: block; }
 .admin-side .link-btn { display: block; width: 100%; text-align: left; padding: 10px 14px; }
+
+/* responsive: điện thoại */
+@media (max-width:600px){
+  .container{width:calc(100% - 24px)}
+  main.container{padding:16px 0 32px}
+  h1{font-size:1.3rem}
+  .hero{padding:24px 18px}.hero h1{font-size:1.5rem}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .search{max-width:none;min-width:0;width:100%;flex-basis:100%}
+  .menu{gap:10px}
+  th,td{padding:8px;font-size:.9rem}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .toolbar .search{max-width:none!important}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .stat{padding:12px}.stat b{font-size:1.2rem}
+  .admin-main{padding:14px}
+  .card{padding:14px}
+  .detail{gap:16px}.detail img{max-width:260px;margin-inline:auto;display:block}
+}
