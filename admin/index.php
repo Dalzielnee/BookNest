@@ -11,6 +11,19 @@ $stats = [
 ];
 $revenue = $pdo->query("SELECT COALESCE(SUM(total),0) FROM orders WHERE status <> 'cancelled'")->fetchColumn();
 $recent = $pdo->query('SELECT o.*, u.email FROM orders o JOIN users u ON u.id = o.user_id ORDER BY o.id DESC LIMIT 5')->fetchAll();
+// Doanh thu 7 ngày gần nhất (không tính đơn hủy)
+$from = date('Y-m-d', strtotime('-6 day'));
+$st = $pdo->prepare("SELECT DATE(created_at) AS d, COUNT(*) AS n, SUM(total) AS rev FROM orders WHERE status <> 'cancelled' AND created_at >= ? GROUP BY DATE(created_at)");
+$st->execute([$from . ' 00:00:00']);
+$byDay = [];
+foreach ($st->fetchAll() as $r) {
+    $byDay[$r['d']] = $r;
+}
+$daily = [];
+for ($i = 0; $i < 7; $i++) {
+    $d = date('Y-m-d', strtotime("-$i day"));
+    $daily[] = ['d' => $d, 'n' => (int)($byDay[$d]['n'] ?? 0), 'rev' => (float)($byDay[$d]['rev'] ?? 0)];
+}
 $low = $pdo->query('SELECT id, title, stock FROM products WHERE stock <= 10 ORDER BY stock ASC LIMIT 5')->fetchAll();
 ?>
 <h1>Tổng quan</h1>
@@ -20,6 +33,15 @@ $low = $pdo->query('SELECT id, title, stock FROM products WHERE stock <= 10 ORDE
   <?php endforeach; ?>
   <div class="stat"><span class="muted">Doanh thu (không tính đơn hủy)</span><b><?= money($revenue) ?></b></div>
 </div>
+
+<h2 style="margin-top:0">Doanh thu 7 ngày gần nhất</h2>
+<div class="table-wrap" style="margin-bottom:24px"><table>
+  <thead><tr><th>Ngày</th><th>Số đơn</th><th class="right">Doanh thu</th></tr></thead>
+  <tbody>
+  <?php foreach ($daily as $r): ?>
+    <tr><td><?= e(date('d/m/Y', strtotime($r['d']))) ?></td><td><?= (int)$r['n'] ?></td><td class="right"><?= money($r['rev']) ?></td></tr>
+  <?php endforeach; ?>
+  </tbody></table></div>
 
 <div class="two-col" style="grid-template-columns:1.4fr 1fr">
   <div>
