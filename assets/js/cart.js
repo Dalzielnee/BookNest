@@ -72,20 +72,19 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // 2. Bấm "Thêm vào giỏ" ở bất kỳ trang nào: giữ nguyên vị trí cuộn
-  document.querySelectorAll('input[name="action"][value="add"]').forEach(function (flag) {
-    var form = flag.form;
-    if (!form) return;
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var button = form.querySelector('button');
-      if (button) button.disabled = true;
-      post(form)
-        .then(function (data) {
-          setBadge(data.count);
-          toast(data.message, data.level);
-        })
-        .catch(function () { form.submit(); })
-        .then(function () { if (button) button.disabled = false; });
-    });
+  // Bắt sự kiện ở cấp document để vẫn chạy với nội dung được nạp lại bằng JS (ví dụ tìm kiếm trực tiếp)
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form.querySelector || !form.querySelector('input[name="action"][value="add"]')) return;
+    e.preventDefault();
+    var button = form.querySelector('button');
+    if (button) button.disabled = true;
+    post(form)
+      .then(function (data) {
+        setBadge(data.count);
+        toast(data.message, data.level);
+      })
+      .catch(function () { form.submit(); })
+      .then(function () { if (button) button.disabled = false; });
   });
 });
