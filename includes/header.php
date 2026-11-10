@@ -15,11 +15,12 @@ $pageTitle = ($title ?? '') ? $title . ' | ' . $cfg['site_name'] : $cfg['site_na
 <header class="site-header">
   <div class="container nav">
     <a class="brand" href="<?= url('index.php') ?>">📚 <?= e($cfg['site_name']) ?></a>
+    <button class="nav-toggle" type="button" aria-label="Mở menu" aria-expanded="false" aria-controls="main-menu" onclick="var m=document.getElementById('main-menu');m.classList.toggle('open');this.setAttribute('aria-expanded',m.classList.contains('open'))">☰</button>
     <form class="search" action="<?= url('products.php') ?>" method="get">
       <input type="search" name="q" placeholder="Tìm sách, tác giả..." value="<?= e($_GET['q'] ?? '') ?>">
       <button type="submit">Tìm</button>
     </form>
-    <nav class="menu">
+    <nav class="menu" id="main-menu">
       <a href="<?= url('index.php') ?>">Trang chủ</a>
       <a href="<?= url('products.php') ?>">Sách</a>
       <a href="<?= url('cart.php') ?>">Giỏ hàng <span class="badge"><?= cart_count() ?></span></a>
